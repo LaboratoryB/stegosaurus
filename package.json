@@ -1,0 +1,24 @@
+{
+  "name": "stegosaurus",
+  "preferGlobal": true,
+  "version": "0.0.1",
+  "author": "Doug Smith <info@laboratoryb.org>",
+  "description": "A steganographic device to hide information inside images",
+  "scripts": {
+    "start": "node ./stegosaurus.js"
+  },
+  "main": "./stegosaurus.js",
+  "repository": {
+    "type": "git",
+    "url": "https://none/yet/"
+  },
+  "keywords": [
+    "steganography",
+    "espionage",
+    "graphics"
+  ],
+  "dependencies" : {
+    "nomnom"     :  "*",
+    "pngjs"      :  "*"
+  }
+}

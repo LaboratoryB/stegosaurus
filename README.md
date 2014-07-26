@@ -1,0 +1,1 @@
+A very, very basic steganographic device for storing a payload into an image.
