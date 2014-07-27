@@ -96,9 +96,6 @@ module.exports = function() {
 			console.log("Sorry, you need to specify -e (encode) or -d (decode)");
 		}
 
-		
-
-
 	}
 
 	this.getCLIArguments();
@@ -285,9 +282,9 @@ module.exports = function() {
 									if (bit) {
 										usestr = "1";
 									}
-									binstr = replaceAt(binstr,8,usestr);
+									binstr = replaceAt(binstr,7,usestr);
 
-									// console.log("!trace BLUE BINSTRING AFTER: ",binstr);
+									// console.log("!trace blue / before after: ",blue,parseInt(binstr,2));
 
 									this.data[idx + 2] = parseInt(binstr,2);
 
