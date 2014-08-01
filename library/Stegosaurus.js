@@ -6,28 +6,169 @@ module.exports = function() {
 	var SPACING_X = 5;
 	var SPACING_Y = 5;
 
-	this.getCLIArguments = function() {
+	var DEFAULT_OUTFILE_NAME = "out.png";
+
+	var is_cli = false;
+
+	// Sample options:
+	/*
+
+	var options = {
+		encode: true,
+		decode: false,
+		target: "",
+		inputmessagefile: "",
+		message: "",
+		size: "",
+	}
+
+
+	*/
+
+	
+	this.handler = function(options,callback) {
+
+		if (options.encode) {
+
+			// Does the target exist?
+
+			fs.exists(options.target,function(exists){
+
+
+				// See if there's an outfile.
+				if (typeof options.outfile == 'undefined') {
+					// Something that doesn't exist.
+					options.outfile = DEFAULT_OUTFILE_NAME;
+				}
+
+				if (!options.outfile) {
+					options.outfile = DEFAULT_OUTFILE_NAME;
+				}
+
+				fs.exists(options.outfile,function(outfileexists){
+
+					// You could handle not overwriting here.
+					
+					// console.log("Exists? ",exists);
+
+					if (exists) {
+
+						// Let's pack up the message
+						if (typeof options.message != 'undefined') {
+							if (options.message.length > 0) {
+
+								var message = this.packMessage(options.message);
+
+								this.encodeImage(options.target,message,options.outfile,function(){
+
+									cliMessage("File encoded as: " + options.outfile);
+									callback(false);
+
+								});
+
+
+							} else {
+								callback("Sorry, you left out the -m, message");
+							}
+						} else {
+
+							// Ok, did they specify a file?
+							if (typeof options.inputmessagefile != 'undefined') {
+						
+								fs.exists(options.target,function(messageexists){
+
+									if (messageexists) {
+
+										fs.readFile(options.inputmessagefile, 'utf8', function(err, data) {
+											if (err) throw err;
+
+											
+											var message = this.packMessage(data);
+											this.encodeImage(options.target,message,options.outfile,function(){
+
+												cliMessage("File encoded as: " + options.outfile);
+												callback(false);
+
+											});
+
+										}.bind(this));
+
+
+									} else {
+
+										callback("Sorry, your input message file: " + options.inputmessagefile + " does not exist.");	
+
+									}
+
+								}.bind(this));
+
+							} else {
+								callback("Sorry, you left out the -i (input message file) or -m (message string) argument");	
+							}
+
+						}
+
+
+					} else {
+						callback("Sorry the file " + options.target + " does not exist (or you forgot the -t target flag)");
+					}
+
+				}.bind(this));
+
+			}.bind(this));
+
+		} else if (options.decode) {
+
+			fs.exists(options.target,function(exists){
+
+				// console.log("Exists? ",exists);
+
+				if (exists) {
+
+					// Great, I think we can just decode it.
+					this.decodeImage(options.target,options.size,function(message){
+						callback(message);	
+					});
+					
+				} else {
+					callback("Sorry, you need to specify a target for decoding.");
+				}
+
+			}.bind(this));
+
+		} else {
+			callback("Sorry, you need to specify -e (encode) or -d (decode)");
+		}
+
+	}
+
+	this.getCLIArguments = function(callback) {
 
 		var opts = require("nomnom")
 		.option('encode', {
 			abbr: 'e',
 			flag: true,
-			help: 'Set to encode a TARGET file.'
+			help: '[mode] Set to encode a TARGET file.'
 		})
 		.option('decode', {
 			abbr: 'd',
 			flag: true,
-			help: 'Set to decode a TARGET file.'
+			help: '[mode] Set to decode a TARGET file.'
 		})
 		.option('target', {
 			abbr: 't',
 			metavar: 'FILE',
-			help: 'Target steganographic file'
+			help: '[both modes] Target steganographic file'
 		})
 		.option('inputmessagefile', {
 			abbr: 'i',
 			metavar: 'FILE',
-			help: 'A text file with the message to encode (used instead of -m)'
+			help: '[encode mode] A text file with the message to encode (used instead of -m)'
+		})
+		.option('outfile', {
+			abbr: 'o',
+			metavar: 'FILE',
+			help: '[encode mode] Output filename'
 		})
 		.option('message', {
 			abbr: 'm',
@@ -42,103 +183,30 @@ module.exports = function() {
 		.parse();
 
 		// console.log("!trace nom opts: ",opts);
+		// Handle this immediately if run from command line.
+		if (opts.encode || opts.decode) {
 
-		if (opts.encode) {
-
-			console.log("encoding....");
-			// Does the target exist?
-
-			fs.exists(opts.target,function(exists){
-
-				// console.log("Exists? ",exists);
-
-				if (exists) {
-
-					// Let's pack up the message
-					if (typeof opts.message != 'undefined') {
-						if (opts.message.length > 0) {
-
-							var message = this.packMessage(opts.message);
-							this.encodeImage(opts.target,message,function(){
-
-								console.log("!trace ENCODING COMPLETE, string message");
-
-							});
-
-
-						} else {
-							console.log("Sorry, you left out the -m, message");
-						}
-					} else {
-
-						// Ok, did they specify a file?
-						if (typeof opts.inputmessagefile != 'undefined') {
-					
-							fs.exists(opts.target,function(messageexists){
-
-								if (messageexists) {
-
-									fs.readFile(opts.inputmessagefile, 'utf8', function(err, data) {
-										if (err) throw err;
-
-										
-										var message = this.packMessage(data);
-										this.encodeImage(opts.target,message,function(){
-
-											console.log("!trace ENCODING COMPLETE, file message");
-
-										});
-
-									}.bind(this));
-
-
-								} else {
-
-									console.log("Sorry, your input message file: " + opts.inputmessagefile + " does not exist.");	
-
-								}
-
-							}.bind(this));
-
-						} else {
-							console.log("Sorry, you left out the -i (input message file) or -m (message string) argument");	
-						}
-
-					}
-
-
-				} else {
-					console.log("Sorry the file %s does not exist (or you forgot the -t target flag)",opts.target);
+			is_cli = true;
+			this.handler(opts,function(err){
+				if (err) {
+					cliMessage(err);
 				}
+			});
 
-			}.bind(this));
+		}
+		
 
-		} else if (opts.decode) {
+	}
 
-			console.log("decoding....");
+	var cliMessage = function(message) {
 
-			fs.exists(opts.target,function(exists){
-
-				// console.log("Exists? ",exists);
-
-				if (exists) {
-
-					// Great, I think we can just decode it.
-					this.decodeImage(opts.target,opts.size);
-
-				} else {
-					console.log("Sorry, you need to specify a target for decoding.");
-				}
-
-			}.bind(this));
-
-		} else {
-			console.log("Sorry, you need to specify -e (encode) or -d (decode)");
+		if (is_cli) {
+			console.log(message);
 		}
 
 	}
 
-	this.getCLIArguments();
+	
 
 	var padZero = function(str) {
 		for (var j = str.length + 1; j <= 8; j++) {
@@ -225,7 +293,7 @@ module.exports = function() {
 
 	}
 
-	this.decodeImage = function(path,size) {
+	this.decodeImage = function(path,size,callback) {
 
 		if (typeof size == 'undefined') {
 			console.log("Defaulting read size to 128");
@@ -281,12 +349,13 @@ module.exports = function() {
 
 				var resultmessage = bitsToMesage(result);
 
-				console.log("And your payload is: ",resultmessage);
+				callback(resultmessage);
+
 			});
 
 	}
 
-	this.encodeImage = function(path,message) {
+	this.encodeImage = function(path,message,outfile,callback) {
 
 		fs.createReadStream(path)
 			.pipe(new PNG({
@@ -343,8 +412,8 @@ module.exports = function() {
 					}
 				}
 
-				console.log("Writing out.png");
-				this.pack().pipe(fs.createWriteStream('out.png'));
+				this.pack().pipe(fs.createWriteStream(outfile));
+				callback(false);
 			});
 
 	}
@@ -360,5 +429,8 @@ module.exports = function() {
 	// https://github.com/aheckmann/gm/blob/master/examples/drawing.js
 
 	*/
+
+	// Instantiate
+	this.getCLIArguments();
 
 }
