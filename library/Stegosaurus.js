@@ -54,8 +54,6 @@ module.exports = function() {
 
 				if (exists) {
 
-					console.log("cool.");
-
 					// Let's pack up the message
 					if (typeof opts.message != 'undefined') {
 						if (opts.message.length > 0) {
@@ -80,18 +78,18 @@ module.exports = function() {
 
 								if (messageexists) {
 
-									var fs = require('fs')
-									fs.readFile(filename, 'utf8', function(err, data) {
+									fs.readFile(opts.inputmessagefile, 'utf8', function(err, data) {
 										if (err) throw err;
 
-										var message = this.packMessage(opts.message);
+										
+										var message = this.packMessage(data);
 										this.encodeImage(opts.target,message,function(){
 
 											console.log("!trace ENCODING COMPLETE, file message");
 
 										});
 
-									});
+									}.bind(this));
 
 
 								} else {
@@ -100,7 +98,7 @@ module.exports = function() {
 
 								}
 
-							});
+							}.bind(this));
 
 						} else {
 							console.log("Sorry, you left out the -i (input message file) or -m (message string) argument");	
