@@ -24,10 +24,15 @@ module.exports = function() {
 			metavar: 'FILE',
 			help: 'Target steganographic file'
 		})
+		.option('inputmessagefile', {
+			abbr: 'i',
+			metavar: 'FILE',
+			help: 'A text file with the message to encode (used instead of -m)'
+		})
 		.option('message', {
 			abbr: 'm',
 			metavar: '"STRING"',
-			help: 'The original file, used in decoding'
+			help: 'The original file, used in decoding (will override -i input file)'
 		})
 		.option('size', {
 			abbr: 's',
@@ -56,14 +61,51 @@ module.exports = function() {
 						if (opts.message.length > 0) {
 
 							var message = this.packMessage(opts.message);
-							this.encodeImage(opts.target,message);
+							this.encodeImage(opts.target,message,function(){
+
+								console.log("!trace ENCODING COMPLETE, string message");
+
+							});
 
 
 						} else {
 							console.log("Sorry, you left out the -m, message");
 						}
 					} else {
-						console.log("Sorry, you left out the -m, message");	
+
+						// Ok, did they specify a file?
+						if (typeof opts.inputmessagefile != 'undefined') {
+					
+							fs.exists(opts.target,function(messageexists){
+
+								if (messageexists) {
+
+									var fs = require('fs')
+									fs.readFile(filename, 'utf8', function(err, data) {
+										if (err) throw err;
+
+										var message = this.packMessage(opts.message);
+										this.encodeImage(opts.target,message,function(){
+
+											console.log("!trace ENCODING COMPLETE, file message");
+
+										});
+
+									});
+
+
+								} else {
+
+									console.log("Sorry, your input message file: " + opts.inputmessagefile + " does not exist.");	
+
+								}
+
+							});
+
+						} else {
+							console.log("Sorry, you left out the -i (input message file) or -m (message string) argument");	
+						}
+
 					}
 
 
