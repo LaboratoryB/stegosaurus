@@ -75,11 +75,12 @@ module.exports = function() {
 							// Ok, did they specify a file?
 							if (typeof options.inputmessagefile != 'undefined') {
 						
-								fs.exists(options.target,function(messageexists){
+								fs.exists(options.inputmessagefile,function(messageexists){
 
 									if (messageexists) {
 
 										fs.readFile(options.inputmessagefile, 'utf8', function(err, data) {
+											console.log("!trace message file?: ",options.inputmessagefile);
 											if (err) throw err;
 
 											
@@ -412,8 +413,10 @@ module.exports = function() {
 					}
 				}
 
-				this.pack().pipe(fs.createWriteStream(outfile));
-				callback(false);
+				this.pack().pipe(fs.createWriteStream(outfile)).on('close',function(){
+					callback(false);	
+				});
+				
 			});
 
 	}

@@ -15,6 +15,10 @@ Unless you're James Bond, then, maybe you'll find another use.
 
 *(coming soon)*
 
+## Usage as NPM Module
+
+
+
 ## Basic CLI Usage
 
 You can always get some help out of it:

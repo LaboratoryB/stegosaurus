@@ -17,9 +17,52 @@
 // ------------------------------------------------------------------------------------------------------------------------ -
 
 
-var constants = require("./includes/constants.js"); 	// Constants module (w/ general configs)
-
-
+var constants = require("./includes/constants.js"); 		// Constants module (w/ general configs)
 
 var Stegosaurus = require("./library/Stegosaurus.js");		// the Compiler
 var stegosaurus = new Stegosaurus();
+
+exports.encodeFile = function(infile,outfile,message,callback) {
+
+	var sendoptions = {
+		encode: true,
+		decode: false,
+		target: infile,
+		inputmessagefile: message,
+	}
+
+	stegosaurus.handler(sendoptions,function(err){
+		callback(err);
+	});
+
+}
+
+exports.encodeString = function(infile,outfile,messagestring,callback) {
+
+	var sendoptions = {
+		encode: true,
+		decode: false,
+		target: infile,
+		message: messagestring,
+	}
+
+	stegosaurus.handler(sendoptions,function(err){
+		callback(err);
+	});
+
+}
+
+exports.decode = function(infile,length_in_bytes,callback) {
+
+	var sendoptions = {
+		encode: false,
+		decode: true,
+		target: infile,
+		size: length_in_bytes,
+	}
+
+	stegosaurus.handler(sendoptions,function(payload){
+		callback(payload);
+	});
+
+}
