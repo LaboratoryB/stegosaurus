@@ -1,6 +1,12 @@
 ## About
 
-A very, very basic steganographic device for storing a payload into an image.
+A very, very basic [steganographic device](http://en.wikipedia.org/wiki/Steganography) for storing a payload in a (png) image.
+
+The resulting image should be the same to the human eye.
+
+You might find it useful to watermark images, however if the images are compresed or resized, it will lose this invisible watermark.
+
+Unless you're James Bond, then, maybe you'll find another use.
 
 * Currently, it only supports `png` files.
 * I haven't tried it with binary, be a guinea pig, try it. (just ascii text)
@@ -28,7 +34,7 @@ Options:
    -s NUMBER, --size NUMBER           Number of bytes to decode
 ```
 
-## Example CLI
+## Example CLI Usage
 
 ### Encoding
 
