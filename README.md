@@ -2,25 +2,32 @@
 
 A very, very basic [steganographic device](http://en.wikipedia.org/wiki/Steganography) for storing a payload in a (png) image.
 
-The resulting image should be the same to the human eye.
+The resulting image (with the hidden payload) should appear to the human eye the same as the original image.
 
-You might find it useful to watermark images, however if the images are compresed or resized, it will lose this invisible watermark.
+For a somewhat realistic use-case, you might find it useful to watermark images.
 
 Unless you're James Bond, then, maybe you'll find another use.
 
+**Caveats**
+
 * Currently, it only supports `png` files.
-* I haven't tried it with binary, be a guinea pig, try it. (just ascii text)
+* I haven't tried it with binary (just ascii text), be a guinea pig, try it.
+* Regarding watermarking: If the images are compresed or resized, it will lose this invisible watermark.
 
 ## Installation
 
-*(coming soon)*
+Just install with NPM, it's that easy.
+
+    npm install stegosaurus
 
 ## Basic CLI Usage
+
+*CLI Install note* For command-line usage, you might want to install it with `sudo npm install -g stegosaurus`.  Otherwise, you'll have to run it with the full path to it. Or add it to your path.
 
 You can always get some help out of it:
 
 ```
-$ node stegosaurus.js --help
+$ ./stegosaurus.js --help
 
 Usage: node stegosaurus.js [options]
 
@@ -41,7 +48,7 @@ Options:
 Here we use `samples/barn.png` as our source, and we encode into the contents of the file `samples/dogood.txt` (A letter from a [series written as a prank by Benjamin Franklin](http://en.wikipedia.org/wiki/Silence_Dogood))
 
 ```
-$ node stegosaurus.js -e -t samples/barn.png -i samples/dogood.txt -o out.png
+$ ./stegosaurus.js -e -t samples/barn.png -i samples/dogood.txt -o out.png
 File encoded as: out.png
 ```
 
@@ -62,9 +69,76 @@ Naturally, you can use this guy as a node module. Essentially three methods you 
 
 ### Methods
 
+#### stegosaurus.encodeFile(original_png, generated_png, message_file_path, [callback])
+
+* `original_png` is the path to your source image file (in PNG format)
+* `generated_png` is the path to the output file that you're generating
+* `message_file_path` is the path to the message file you'll hide / use as a payload in the generated png.
+* `callback` fires when this method is done encoding your file.
+
+
+#### stegosaurus.encodeString(original_png, generated_png, message_string, [callback])
+
+* `original_png` is the path to your source image file (in PNG format)
+* `generated_png` is the path to the output file that you're generating
+* `message_string` is a string to hide / use as a payload in the generated png.
+* `callback` fires when this method is done encoding your file.
+
+#### stegosaurus.decode(generated_png, message_size_bytes, [callback])
+
+* `generated_png` is the path to a png with a hidden message
+* `message_size_bytes` is how many bytes you want to decode from the generated png
+* `callback` fires when this method is done decoding your file.
+
 
 ### Samples
 
-Decoding from a file:
+Encoding (and then subsequently decoding) a text from a file into a PNG:
+
+```javascript
+var stego = require("stegosaurus");
+var fs = require("fs");
+
+var original_png = "samples/barn.png";		// The original png file.
+var generated_png = "out.png";				// The resulting file.
+var message_file = "samples/dogood.txt";	// The message we're going to use as our payload.
+
+stego.encodeFile(original_png,generated_png,message_file,function(err){
+	if (err) { throw err; }
+	console.log("Wrote png to: ",generated_png);
 
 
+	// How long was the message?
+	fs.stat(message_file, function (err, stats) {
+
+        // Now let's decode that.
+		stego.decode(generated_png,stats.size,function(payload){
+			console.log("Decoded message: ",payload);
+		});
+
+    });
+
+});
+```
+
+Encoding (and then subsequently decoding) a text from a string into a PNG:
+
+```javascript
+var stego = require("stegosaurus");
+var fs = require("fs");
+
+var original_png = "samples/barn.png";		 // The original png file.
+var generated_png = "out.png";				 // The resulting file.
+var message_string = "Drink more Ovaltine."; // The message we're encoding.
+
+stego.encodeString(original_png,generated_png,message_string,function(err){
+	if (err) { throw err; }
+	console.log("Wrote png to: ",generated_png);
+
+    // Now let's decode that.
+	stego.decode(generated_png,message_string.length,function(payload){
+		console.log("Decoded message: ",payload);
+	});
+
+});
+```
