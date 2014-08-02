@@ -1,4 +1,4 @@
-var stego = require("./stegosaurus.js");
+var stego = require("../stegosaurus.js");
 var fs = require("fs");
 
 var original_png = "samples/barn.png";		// The original png file.
