@@ -65,4 +65,6 @@ Naturally, you can use this guy as a node module. Essentially three methods you 
 
 ### Samples
 
+Decoding from a file:
+
 
