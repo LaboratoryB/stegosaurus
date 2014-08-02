@@ -15,10 +15,6 @@ Unless you're James Bond, then, maybe you'll find another use.
 
 *(coming soon)*
 
-## Usage as NPM Module
-
-
-
 ## Basic CLI Usage
 
 You can always get some help out of it:
@@ -59,3 +55,14 @@ $ wc -c samples/dogood.txt
 $ node stegosaurus.js -d -t out.png -s 3945
 To the Author of the New-England Courant [...]
 ```
+
+## Usage as Node.js module
+
+Naturally, you can use this guy as a node module. Essentially three methods you can call.
+
+### Methods
+
+
+### Samples
+
+
