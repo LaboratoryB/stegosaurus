@@ -25,6 +25,10 @@ var stegosaurus = new Stegosaurus();
 
 exports.encodeFile = function(infile,outfile,message,callback) {
 
+	if (typeof callback == 'undefined') {
+		callback = function(){};
+	}
+
 	var sendoptions = {
 		encode: true,
 		decode: false,
@@ -40,6 +44,10 @@ exports.encodeFile = function(infile,outfile,message,callback) {
 
 exports.encodeString = function(infile,outfile,messagestring,callback) {
 
+	if (typeof callback == 'undefined') {
+		callback = function(){};
+	}
+
 	var sendoptions = {
 		encode: true,
 		decode: false,
@@ -54,6 +62,10 @@ exports.encodeString = function(infile,outfile,messagestring,callback) {
 }
 
 exports.decode = function(infile,length_in_bytes,callback) {
+
+	if (typeof callback == 'undefined') {
+		callback = function(){};
+	}
 
 	var sendoptions = {
 		encode: false,

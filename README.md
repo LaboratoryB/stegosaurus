@@ -8,6 +8,8 @@ For a somewhat realistic use-case, you might find it useful to watermark images.
 
 Unless you're James Bond, then, maybe you'll find another use.
 
+You'll find a sample original & encoded image at the bottom of this readme.
+
 **Caveats**
 
 * Currently, it only supports `png` files.
@@ -69,26 +71,26 @@ Naturally, you can use this guy as a node module. Essentially three methods you 
 
 ### Methods
 
-#### stegosaurus.encodeFile(original_png, generated_png, message_file_path, [callback])
+#### stegosaurus.encodeFile(original_png, generated_png, message_file_path, [callback(err)])
 
 * `original_png` is the path to your source image file (in PNG format)
 * `generated_png` is the path to the output file that you're generating
 * `message_file_path` is the path to the message file you'll hide / use as a payload in the generated png.
-* `callback` fires when this method is done encoding your file.
+* `callback` when finished encoding, returns if there was an error (as boolean)
 
 
-#### stegosaurus.encodeString(original_png, generated_png, message_string, [callback])
+#### stegosaurus.encodeString(original_png, generated_png, message_string, [callback(err)])
 
 * `original_png` is the path to your source image file (in PNG format)
 * `generated_png` is the path to the output file that you're generating
 * `message_string` is a string to hide / use as a payload in the generated png.
-* `callback` fires when this method is done encoding your file.
+* `callback` when finished encoding, returns if there was an error (as boolean)
 
-#### stegosaurus.decode(generated_png, message_size_bytes, [callback])
+#### stegosaurus.decode(generated_png, message_size_bytes, [callback(decoded_string)])
 
 * `generated_png` is the path to a png with a hidden message
 * `message_size_bytes` is how many bytes you want to decode from the generated png
-* `callback` fires when this method is done decoding your file.
+* `callback` returns with the decoded payload as a string.
 
 
 ### Samples
@@ -142,3 +144,15 @@ stego.encodeString(original_png,generated_png,message_string,function(err){
 
 });
 ```
+
+## Sample Images
+
+Original png image:
+
+![Original image](http://i.imgur.com/hqEEEvX.png)
+
+Image encoded with first of the Silence Dogood letters
+
+![Image with encoding](http://i.imgur.com/y036MWu.png)
+
+Don't be shy, check out the [fullsize original](http://i.imgur.com/hqEEEvX.png) and the [full-sized image with encoded message](http://i.imgur.com/y036MWu.png).
