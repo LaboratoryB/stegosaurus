@@ -41,8 +41,8 @@ Options:
    -t FILE, --target FILE             [both modes] Target steganographic file
    -i FILE, --inputmessagefile FILE   [encode mode] A text file with the message to encode (used instead of -m)
    -o FILE, --outfile FILE            [encode mode] Output filename
-   -m "STRING", --message "STRING"    The original file, used in decoding (will override -i input file)
-   -s NUMBER, --size NUMBER           Number of bytes to decode
+   -m "STRING", --message "STRING"    [encode mode] A string to encode into the resulting png
+   -s NUMBER, --size NUMBER           [decode mode] Number of bytes to decode
 ```
 
 ## Example CLI Usage

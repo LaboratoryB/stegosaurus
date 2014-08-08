@@ -175,12 +175,12 @@ module.exports = function() {
 		.option('message', {
 			abbr: 'm',
 			metavar: '"STRING"',
-			help: 'The original file, used in decoding (will override -i input file)'
+			help: '[encode mode] A string to encode into the resulting png'
 		})
 		.option('size', {
 			abbr: 's',
 			metavar: 'NUMBER',
-			help: 'Number of bytes to decode'
+			help: '[decode mode] Number of bytes to decode'
 		})
 		.parse();
 
