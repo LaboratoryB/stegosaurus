@@ -13,7 +13,3 @@ function define(name, value) {
 
 // ---------------------------------- Debug constants.
 define('DEBUG',false);
-
-define('SERVER_PORT',8000);
-
-// ---------------------------------- Utility methods.

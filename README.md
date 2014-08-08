@@ -8,13 +8,15 @@ For a somewhat realistic use-case, you might find it useful to watermark images.
 
 Unless you're James Bond, then, maybe you'll find another use.
 
-You'll find a sample original & encoded image at the bottom of this readme.
+You'll find a sample original & encoded image near the bottom of this readme.
 
 **Caveats**
 
 * Currently, it only supports `png` files.
 * I haven't tried it with binary (just ascii text), be a guinea pig, try it.
 * Regarding watermarking: If the images are compresed or resized, it will lose this invisible watermark.
+
+See future plans, near the bottom.
 
 ## Installation
 
@@ -156,3 +158,13 @@ Image encoded with first of the Silence Dogood letters
 ![Image with encoding](http://i.imgur.com/y036MWu.png)
 
 Don't be shy, check out the [fullsize original](http://i.imgur.com/hqEEEvX.png) and the [full-sized image with encoded message](http://i.imgur.com/y036MWu.png).
+
+## Future Considerations
+
+In the future, I'd like to expand this module to:
+
+* Better handle binary using typed arrays
+ * This was originally written in an afternoon, and I did somethings to quickly work out the algo. It could be done more efficiently, beautifully.
+* Encrypt the data. (That'd be nice.)
+* Obscure where the data is hidden in the image by using a pre-shared key which defines where it is. Or, compare vs. original (one or both)
+* Determine size of image by packing the size of the message into the encoded message, a la, a header in the stored data.

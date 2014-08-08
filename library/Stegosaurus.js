@@ -25,15 +25,16 @@ module.exports = function() {
 
 	*/
 
+	// Here we handle the request for this module.
+	// It checks for presense of files, and make sure the options array is passed in.
+	// Note: the options are originally based on a set from nomnom (cli arguments parser)
 	
 	this.handler = function(options,callback) {
 
 		if (options.encode) {
 
 			// Does the target exist?
-
 			fs.exists(options.target,function(exists){
-
 
 				// See if there's an outfile.
 				if (typeof options.outfile == 'undefined') {
@@ -80,7 +81,7 @@ module.exports = function() {
 									if (messageexists) {
 
 										fs.readFile(options.inputmessagefile, 'utf8', function(err, data) {
-											console.log("!trace message file?: ",options.inputmessagefile);
+											// console.log("!trace message file?: ",options.inputmessagefile);
 											if (err) throw err;
 
 											
@@ -199,6 +200,7 @@ module.exports = function() {
 
 	}
 
+	// Conditionally log to the console if you're using this from the CLI.
 	var cliMessage = function(message) {
 
 		if (is_cli) {
@@ -208,7 +210,9 @@ module.exports = function() {
 	}
 
 	
-
+	// Pad zeroes onto our "binary string"
+	// TODO: This is inefficient. Was done to be written quickly.
+	
 	var padZero = function(str) {
 		for (var j = str.length + 1; j <= 8; j++) {
 			str = "0" + str;
@@ -216,13 +220,21 @@ module.exports = function() {
 		return str;
 	}
 
+	// Replace a character in a string given an index.
+	
 	var replaceAt = function(instr, index, character) {
 	    return instr.substr(0, index) + character + instr.substr(index+character.length);
 	}
 
+	// This packs our message into an array of bits.
+	// TODO: Done to be quick, I can unshift pieces from it easily.
+
 	this.packMessage = function(instr) {
 
+		// Make a new buffer, based on our incoming message.
 		var buf = new Buffer(instr);
+
+		// Sometimes you want to look at that buffer.
 		// console.log("!trace buffer: ",buf);
 
 		// Let's make an array of bits, based on each 
@@ -374,17 +386,26 @@ module.exports = function() {
 									// Let's unshift one.
 									var bit = message.shift();
 
+									// If you'd like to inspect it's coordinates and the message value.
 									// console.log("!trace %d,%d --> %d",x,y,bit);
 
 									// Now we can take that pixel, and let's get it's blue value in binary.
-									
+									// So we calculate it's index in the data from pngjs.
 									var idx = (this.width * y + x) << 2;
 
+									// Pick out that pixel.
 									var blue = this.data[idx+2];
 
+									// We convert the integer value of the blue part of the pixel...
+									// To a binary string.
+									// TODO: Use typed arrays.
+									// This was easy for writing this quickly. 
+									// I'd rather do it a sexier way, but, I was just trying to prototype this.
+									// ...It's inefficient, but, works.
 									var binstr = blue.toString(2);
 									binstr = padZero(binstr);
 
+									// Sometimes, you want to look at it.
 									// console.log("!trace BLUE BINSTRING: ",binstr);
 
 									// Replace that least significant bit with our shifted bit
@@ -398,12 +419,6 @@ module.exports = function() {
 
 									this.data[idx + 2] = parseInt(binstr,2);
 
-									// invert color
-									//this.data[idx] = 50; // 255 - this.data[idx];
-									//this.data[idx+1] = 50; // 255 - this.data[idx+1];
-									//this.data[idx+2] = 50; // 255 - this.data[idx+2];
-
-
 								}
 							}
 						}
@@ -413,6 +428,7 @@ module.exports = function() {
 					}
 				}
 
+				// Finally, write it out, and return that it happened without error.
 				this.pack().pipe(fs.createWriteStream(outfile)).on('close',function(){
 					callback(false);	
 				});
@@ -421,19 +437,8 @@ module.exports = function() {
 
 	}
 	
-
-
-	/*
-	drawPoint
-	Draws a Point.
-
-	gm("img.png").drawPoint(x, y)
-
-	// https://github.com/aheckmann/gm/blob/master/examples/drawing.js
-
-	*/
-
-	// Instantiate
+	// Instantiate this guy, and kick it off.
+	// It won't do anything if you're not using it CLI-style.
 	this.getCLIArguments();
 
 }

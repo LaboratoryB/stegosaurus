@@ -15,13 +15,24 @@
 */
 // ------------------------------------------------------------------------------------------------------------------------ -
 // A (quickly made) steganographic device to hide information in images.
+// Created by Doug Smith, July 2014 (dougbtv@sectivum.io)
+// Licensed under the MIT license, see license.txt
+// ------------------------------------------------------------------------------------------------------------------------ -
+// What you're looking at is the setup, and the public methods.
+// Inside library/Stegosaurus.js you'll find the logic / private methods.
 // ------------------------------------------------------------------------------------------------------------------------ -
 
 
-var constants = require("./includes/constants.js"); 		// Constants module (w/ general configs)
+// Constants module (w/ general configs)
+// Currently, not really used. But, in case I need it later.
+var constants = require("./includes/constants.js"); 		
 
-var Stegosaurus = require("./library/Stegosaurus.js");		// the Compiler
+// Setup our primary library module, which we'll handle in our exports here.
+var Stegosaurus = require("./library/Stegosaurus.js");
 var stegosaurus = new Stegosaurus();
+
+
+// Encode a PNG image, given a message file.
 
 exports.encodeFile = function(infile,outfile,message,callback) {
 
@@ -42,6 +53,8 @@ exports.encodeFile = function(infile,outfile,message,callback) {
 
 }
 
+// Encode a PNG image, given a string.
+
 exports.encodeString = function(infile,outfile,messagestring,callback) {
 
 	if (typeof callback == 'undefined') {
@@ -60,6 +73,8 @@ exports.encodeString = function(infile,outfile,messagestring,callback) {
 	});
 
 }
+
+// Encode a message
 
 exports.decode = function(infile,length_in_bytes,callback) {
 
