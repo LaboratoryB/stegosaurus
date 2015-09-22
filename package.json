@@ -20,5 +20,10 @@
   "dependencies" : {
     "nomnom"     :  "*",
     "pngjs"      :  "*"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.5",
+    "grunt-contrib-nodeunit": "~0.4.1"
   }
+
 }
