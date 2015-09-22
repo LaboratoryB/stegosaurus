@@ -44,6 +44,7 @@ exports.encodeFile = function(infile,outfile,message,callback) {
 		encode: true,
 		decode: false,
 		target: infile,
+		outfile: outfile,
 		inputmessagefile: message,
 	}
 
@@ -65,6 +66,7 @@ exports.encodeString = function(infile,outfile,messagestring,callback) {
 		encode: true,
 		decode: false,
 		target: infile,
+		outfile: outfile,
 		message: messagestring,
 	}
 
