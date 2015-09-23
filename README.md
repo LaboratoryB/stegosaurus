@@ -1,4 +1,6 @@
-## About
+[![Build Status](https://travis-ci.org/LaboratoryB/stegosaurus.svg?branch=master)](https://travis-ci.org/LaboratoryB/stegosaurus)
+
+## About Stegosaurus
 
 A very, very basic [steganographic device](http://en.wikipedia.org/wiki/Steganography) for storing a payload in a (png) image.
 
