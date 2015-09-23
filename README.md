@@ -169,6 +169,10 @@ grunt nodeunit
 
 You'll find the tests in the `/test/` folder, for now, just a regression test.
 
+## Node.js version support
+
+Requires 0.10 or later. Namely due to the dependencies this carries. See `.travis.yml` for currently supported versions.
+
 ## Future Considerations
 
 In the future, I'd like to expand this module to:

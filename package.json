@@ -1,7 +1,7 @@
 {
   "name": "stegosaurus",
   "preferGlobal": true,
-  "version": "0.0.9",
+  "version": "0.1.1",
   "author": "Doug Smith <dougbtv@sectivum.io>",
   "description": "A steganographic device to hide information inside images",
   "homepage": "https://github.com/dougbtv/stegosaurus",
