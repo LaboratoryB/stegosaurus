@@ -21,7 +21,6 @@ module.exports = {
 		stego.encodeFile(original_png,generated_png,message_file,function(err){
 			if (err) { throw err; }
 			
-			// console.log("Wrote png to: ",generated_png);
 			fs.exists(generated_png,function(exists){
 				test.ok(exists, "File generates: " + generated_png);
 			
@@ -45,15 +44,15 @@ module.exports = {
 	encodeAndDecodeString: function(test) {
 		stego.encodeString(original_png,generated_png,message_string,function(err){
 			if (err) { throw err; }
-			console.log("Wrote png to: ",generated_png);
+			
 			fs.exists(generated_png,function(exists){
 				test.ok(exists, "File generates: " + generated_png);
 				
 				// Now let's decode that.
 				stego.decode(generated_png,message_string.length,function(payload){
+					// console.log("Decoded message: ",payload);
 					test.ok(payload == message_string, "Decoded properly");
 					test.done();
-					// console.log("Decoded message: ",payload);
 				});
 				
 			});
