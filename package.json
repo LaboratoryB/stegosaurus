@@ -7,6 +7,9 @@
   "homepage": "https://github.com/dougbtv/stegosaurus",
   "main": "stegosaurus",
   "bin" : { "stegosaurus" : "./stegosaurus.js" },
+  "scripts": {
+    "test": "grunt nodeunit"
+  },
   "repository": {
     "type": "git",
     "url": "git@github.com:dougbtv/stegosaurus.git"
