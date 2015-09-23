@@ -159,6 +159,16 @@ Image encoded with first of the Silence Dogood letters
 
 Don't be shy, check out the [fullsize original](http://i.imgur.com/hqEEEvX.png) and the [full-sized image with encoded message](http://i.imgur.com/y036MWu.png).
 
+## Unit tests
+
+Run the unit tests by issuing:
+
+```bash
+grunt nodeunit
+```
+
+You'll find the tests in the `/test/` folder, for now, just a regression test.
+
 ## Future Considerations
 
 In the future, I'd like to expand this module to:
